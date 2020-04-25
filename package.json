@@ -1,6 +1,6 @@
 {
     "name": "com.brainslugs83.common",
-    "displayName": "MikeysPrereqs",
+    "displayName": "Mikeys Prereqs",
     "description": "Mikey's Collection of Common Packages and other random bullshit.",
     "version": "1.0.0",
     "dependencies": {
