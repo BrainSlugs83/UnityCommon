@@ -1,0 +1,5 @@
+https://www.clicktorelease.com/code/spherical-normal-mapping/
+
+Code by Jaume Sánchez @thespite
+Coded using three.js (with Subdivision modifier and ImprovedNoise), Lee Perry-Smith's head, Suzanne.
+Textures and normal maps are owned by their respective owners (LitSphere from polycount.com, Luxology, etc.)
