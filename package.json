@@ -2,7 +2,7 @@
     "name": "com.brainslugs83.common",
     "displayName": "Mikeys Prereqs",
     "description": "Mikey's Collection of Common Packages and other random bullshit.",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "dependencies": {
         "com.unity.probuilder": "4.4.0",
         "com.unity.progrids": "3.0.3-preview.6",
