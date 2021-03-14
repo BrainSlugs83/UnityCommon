@@ -2,36 +2,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[DefaultExecutionOrder(-29000)]
-public class BgRunner : MonoBehaviour
+namespace UnityCommon
 {
-    public static BgRunner Instance { get; private set; }
-
-    public void Awake()
+    [DefaultExecutionOrder(-29000)]
+    public class BgRunner : MonoBehaviour
     {
-        if (Instance && Instance != this)
-        {
-            DestroyImmediate(this.gameObject);
-        }
-        else
-        {
-            Instance = this;
-            DontDestroyOnLoad(this);
-        }
-    }
+        public static BgRunner Instance { get; private set; }
 
-    public static Coroutine TryRunCoRoutine(IEnumerator coroutine)
-    {
-        if (!Instance)
+        public void Awake()
         {
-            Utils.EnsureBgRunner();
+            if (Instance && Instance != this)
+            {
+                DestroyImmediate(this.gameObject);
+            }
+            else
+            {
+                Instance = this;
+                DontDestroyOnLoad(this);
+            }
         }
 
-        if (coroutine != null && Instance && Instance.isActiveAndEnabled)
+        public static Coroutine TryRunCoRoutine(IEnumerator coroutine)
         {
-            return Instance.StartCoroutine(coroutine);
-        }
+            if (!Instance)
+            {
+                Utils.EnsureBgRunner();
+            }
 
-        return null;
+            if (coroutine != null && Instance && Instance.isActiveAndEnabled)
+            {
+                return Instance.StartCoroutine(coroutine);
+            }
+
+            return null;
+        }
     }
 }

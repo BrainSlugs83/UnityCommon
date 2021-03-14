@@ -3,82 +3,85 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Glow : MonoBehaviour
+namespace UnityCommon
 {
-    public bool IsGlowing = true;
-
-    private Vector2 MoveDir = Vector2.zero;
-    private HashSet<Material> materials = new HashSet<Material>();
-
-    // Update is called once per frame
-    private void Update()
+    public class Glow : MonoBehaviour
     {
-        if (IsGlowing)
+        public bool IsGlowing = true;
+
+        private Vector2 MoveDir = Vector2.zero;
+        private HashSet<Material> materials = new HashSet<Material>();
+
+        // Update is called once per frame
+        private void Update()
         {
-            bool reset = false;
-
-            if (!materials.Any())
+            if (IsGlowing)
             {
-                reset = true;
+                bool reset = false;
 
-                foreach (var mr in GetComponentsInChildren<MeshRenderer>())
+                if (!materials.Any())
                 {
-                    if (mr.material)
+                    reset = true;
+
+                    foreach (var mr in GetComponentsInChildren<MeshRenderer>())
                     {
-                        materials.Add(mr.material);
-                    }
-                    else if (mr.sharedMaterial)
-                    {
-                        materials.Add(mr.sharedMaterial);
+                        if (mr.material)
+                        {
+                            materials.Add(mr.material);
+                        }
+                        else if (mr.sharedMaterial)
+                        {
+                            materials.Add(mr.sharedMaterial);
+                        }
                     }
                 }
-            }
 
-            foreach (var m in materials)
-            {
-                if (reset)
-                {
-                    if (m.HasProperty("_Cutoff")) { m.SetFloat("_Cutoff", Random.Range(.4f, .6f)); }
-                    if (m.HasProperty("_CutoffMultiply")) { m.SetFloat("_CutoffMultiply", Random.Range(8f, 12f)); }
-                }
-
-                if (m.HasProperty("_NoiseTex"))
+                foreach (var m in materials)
                 {
                     if (reset)
                     {
-                        m.SetTextureOffset("_NoiseTex", new Vector2(Random.Range(-10f, 10f), Random.Range(-10f, 10f)));
-                        MoveDir = new Vector2(Random.Range(-10f, 10f), Random.Range(-10f, 10f));
-                        MoveDir.Normalize();
-                        MoveDir *= .1f;
+                        if (m.HasProperty("_Cutoff")) { m.SetFloat("_Cutoff", Random.Range(.4f, .6f)); }
+                        if (m.HasProperty("_CutoffMultiply")) { m.SetFloat("_CutoffMultiply", Random.Range(8f, 12f)); }
                     }
-                    else
+
+                    if (m.HasProperty("_NoiseTex"))
                     {
-                        var offset = m.GetTextureOffset("_NoiseTex");
-                        m.SetTextureOffset("_NoiseTex", offset + (MoveDir * Time.deltaTime));
+                        if (reset)
+                        {
+                            m.SetTextureOffset("_NoiseTex", new Vector2(Random.Range(-10f, 10f), Random.Range(-10f, 10f)));
+                            MoveDir = new Vector2(Random.Range(-10f, 10f), Random.Range(-10f, 10f));
+                            MoveDir.Normalize();
+                            MoveDir *= .1f;
+                        }
+                        else
+                        {
+                            var offset = m.GetTextureOffset("_NoiseTex");
+                            m.SetTextureOffset("_NoiseTex", offset + (MoveDir * Time.deltaTime));
 
-                        var dir = Mathf.Atan2(MoveDir.y, MoveDir.x);
-                        dir += (Random.Range(-.5f, .5f) / 180f) * Mathf.PI;
+                            var dir = Mathf.Atan2(MoveDir.y, MoveDir.x);
+                            dir += (Random.Range(-.5f, .5f) / 180f) * Mathf.PI;
 
-                        MoveDir.x = Mathf.Cos(dir);
-                        MoveDir.y = Mathf.Sin(dir);
+                            MoveDir.x = Mathf.Cos(dir);
+                            MoveDir.y = Mathf.Sin(dir);
 
-                        MoveDir.Normalize();
-                        MoveDir *= .1f;
+                            MoveDir.Normalize();
+                            MoveDir *= .1f;
+                        }
                     }
                 }
             }
-        }
-        else
-        {
-            if (materials.Any())
+            else
             {
-                foreach (var m in materials)
+                if (materials.Any())
                 {
-                    if (m.HasProperty("_Cutoff")) { m.SetFloat("_Cutoff", 1f); }
-                    if (m.HasProperty("_CutoffMultiply")) { m.SetFloat("_CutoffMultiply", 1f); }
-                }
+                    foreach (var m in materials)
+                    {
+                        if (m.HasProperty("_Cutoff")) { m.SetFloat("_Cutoff", 1f); }
+                        if (m.HasProperty("_CutoffMultiply")) { m.SetFloat("_CutoffMultiply", 1f); }
+                    }
 
-                materials.Clear();
+                    materials.Clear();
+                }
             }
         }
     }

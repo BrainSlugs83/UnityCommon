@@ -2,34 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ParticleSystemAutoCleanup : MonoBehaviour
+namespace UnityCommon
 {
-    private ParticleSystem[] syss;
-
-    // Start is called before the first frame update
-    private void Start()
+    public class ParticleSystemAutoCleanup : MonoBehaviour
     {
-        syss = GetComponentsInChildren<ParticleSystem>();
-        if (syss == null || syss.Length == 0)
-        {
-            DestroyImmediate(this);
-            return;
-        }
-    }
+        private ParticleSystem[] syss;
 
-    // Update is called once per frame
-    private void FixedUpdate()
-    {
-        if (syss != null)
+        // Start is called before the first frame update
+        private void Start()
         {
-            foreach (var sys in syss)
+            syss = GetComponentsInChildren<ParticleSystem>();
+            if (syss == null || syss.Length == 0)
             {
-                if (sys && sys.IsAlive(true)) { return; }
+                DestroyImmediate(this);
+                return;
+            }
+        }
+
+        // Update is called once per frame
+        private void FixedUpdate()
+        {
+            if (syss != null)
+            {
+                foreach (var sys in syss)
+                {
+                    if (sys && sys.IsAlive(true)) { return; }
+                }
+
+                syss = null;
             }
 
-            syss = null;
+            DestroyImmediate(this.gameObject);
         }
-
-        DestroyImmediate(this.gameObject);
     }
 }
