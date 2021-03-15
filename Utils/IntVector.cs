@@ -15,7 +15,9 @@ namespace UnityCommon
         public int x;
         public int y;
 
-        public float magnitude => MathF.Sqrt(x * x + y * y);
+#if (UNITY || UNITY_STANDALONE || UNITY_EDITOR || UNITY_ANDROID || UNITY_64 || UNITY_WEBGL)
+        public float magnitude => ((Vector2)this).magnitude;
+#endif
 
         public IntVector2(int x, int y)
         {
@@ -179,6 +181,10 @@ namespace UnityCommon
             this.y = y;
             this.z = z;
         }
+
+#if (UNITY || UNITY_STANDALONE || UNITY_EDITOR || UNITY_ANDROID || UNITY_64 || UNITY_WEBGL)
+        public float magnitude => ((Vector3)this).magnitude;
+#endif
 
         public override string ToString()
         {
