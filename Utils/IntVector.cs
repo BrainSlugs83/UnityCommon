@@ -1,10 +1,8 @@
-﻿#if UNITY
+﻿#if (UNITY || UNITY_STANDALONE || UNITY_EDITOR || UNITY_ANDROID || UNITY_64 || UNITY_WEBGL)
 using UnityEngine;
 #else
-
 using System;
 using System.Drawing;
-
 #endif
 
 namespace UnityCommon
@@ -32,7 +30,7 @@ namespace UnityCommon
 
         public override int GetHashCode()
         {
-#if UNITY
+#if (UNITY || UNITY_STANDALONE || UNITY_EDITOR || UNITY_ANDROID || UNITY_64 || UNITY_WEBGL)
             return new Vector2(x, y).GetHashCode();
 #else
             return new Point(x, y).GetHashCode();
@@ -46,7 +44,7 @@ namespace UnityCommon
             {
                 return iv.x == x && iv.y == y;
             }
-#if UNITY
+#if (UNITY || UNITY_STANDALONE || UNITY_EDITOR || UNITY_ANDROID || UNITY_64 || UNITY_WEBGL)
             else if (obj is Vector2 v)
             {
                 return new Vector2(x, y) == v;
@@ -76,7 +74,7 @@ namespace UnityCommon
 
         public static implicit operator IntVector2(int i) => zero + i;
 
-#if UNITY
+#if (UNITY || UNITY_STANDALONE || UNITY_EDITOR || UNITY_ANDROID || UNITY_64 || UNITY_WEBGL)
         public static implicit operator Vector2(IntVector2 iv) => new Vector2(iv.x, iv.y);
 #endif
 
@@ -92,7 +90,7 @@ namespace UnityCommon
 
         public static implicit operator IntVector4(IntVector2 v) => new IntVector4(v.x, v.y, 0, 0);
 
-#if UNITY
+#if (UNITY || UNITY_STANDALONE || UNITY_EDITOR || UNITY_ANDROID || UNITY_64 || UNITY_WEBGL)
         public static explicit operator IntVector2(Vector2 v) => new IntVector2((int)v.x, (int)v.y);
 #endif
 
@@ -119,7 +117,7 @@ namespace UnityCommon
 
         public static IntVector2 operator -(int a, IntVector2 b) => new IntVector2(a - b.x, a - b.y);
 
-#if UNITY
+#if (UNITY || UNITY_STANDALONE || UNITY_EDITOR || UNITY_ANDROID || UNITY_64 || UNITY_WEBGL)
         // IntVector (op) Float
         public static Vector2 operator *(IntVector2 a, float b) => ((Vector2)a) * b;
 
@@ -146,7 +144,7 @@ namespace UnityCommon
 
         public static IntVector2 operator /(IntVector2 left, IntVector2 right) => new IntVector2(left.x / right.x, left.y / right.y);
 
-#if UNITY
+#if (UNITY || UNITY_STANDALONE || UNITY_EDITOR || UNITY_ANDROID || UNITY_64 || UNITY_WEBGL)
         // IntVector (op) Vector
         public static Vector2 operator +(IntVector2 a, Vector2 b) => (Vector2)a + b;
 
@@ -189,7 +187,7 @@ namespace UnityCommon
 
         public override int GetHashCode()
         {
-#if UNITY
+#if (UNITY || UNITY_STANDALONE || UNITY_EDITOR || UNITY_ANDROID || UNITY_64 || UNITY_WEBGL)
             return new Vector3(x, y, z).GetHashCode();
 #else
             unchecked
@@ -208,7 +206,7 @@ namespace UnityCommon
             {
                 return iv.x == x && iv.y == y && iv.z == z;
             }
-#if UNITY
+#if (UNITY || UNITY_STANDALONE || UNITY_EDITOR || UNITY_ANDROID || UNITY_64 || UNITY_WEBGL)
             else if (obj is Vector3 v)
             {
                 return new Vector3(x, y, z) == v;
@@ -230,7 +228,7 @@ namespace UnityCommon
 
         public static implicit operator IntVector3(int i) => zero + i;
 
-#if UNITY
+#if (UNITY || UNITY_STANDALONE || UNITY_EDITOR || UNITY_ANDROID || UNITY_64 || UNITY_WEBGL)
         public static implicit operator Vector3(IntVector3 iv) => new Vector3(iv.x, iv.y, iv.z);
 #endif
 
@@ -244,7 +242,7 @@ namespace UnityCommon
 
         public static explicit operator IntVector3(IntVector4 iv) => new IntVector3(iv.x, iv.y, iv.z);
 
-#if UNITY
+#if (UNITY || UNITY_STANDALONE || UNITY_EDITOR || UNITY_ANDROID || UNITY_64 || UNITY_WEBGL)
         public static explicit operator IntVector3(Vector3 v) => new IntVector3((int)v.x, (int)v.y, (int)v.z);
 #endif
 
@@ -265,7 +263,7 @@ namespace UnityCommon
 
         public static IntVector3 operator -(int a, IntVector3 b) => new IntVector3(a - b.x, a - b.y, a - b.z);
 
-#if UNITY
+#if (UNITY || UNITY_STANDALONE || UNITY_EDITOR || UNITY_ANDROID || UNITY_64 || UNITY_WEBGL)
         // IntVector (op) Float
 
         public static Vector3 operator *(IntVector3 a, float b) => ((Vector3)a) * b;
@@ -293,7 +291,7 @@ namespace UnityCommon
 
         public static IntVector3 operator /(IntVector3 left, IntVector3 right) => new IntVector3(left.x / right.x, left.y / right.y, left.z / right.z);
 
-#if UNITY
+#if (UNITY || UNITY_STANDALONE || UNITY_EDITOR || UNITY_ANDROID || UNITY_64 || UNITY_WEBGL)
         // IntVector (op) Vector
 
         public static Vector3 operator +(IntVector3 a, Vector3 b) => (Vector3)a + b;
@@ -339,7 +337,7 @@ namespace UnityCommon
 
         public override int GetHashCode()
         {
-#if UNITY
+#if (UNITY || UNITY_STANDALONE || UNITY_EDITOR || UNITY_ANDROID || UNITY_64 || UNITY_WEBGL)
             return new Vector4(x, y, z, w).GetHashCode();
 #else
             unchecked
@@ -362,7 +360,7 @@ namespace UnityCommon
             {
                 return iv.x == x && iv.y == y && iv.z == z && iv.w == w;
             }
-#if UNITY
+#if (UNITY || UNITY_STANDALONE || UNITY_EDITOR || UNITY_ANDROID || UNITY_64 || UNITY_WEBGL)
             else if (obj is Vector4 v)
             {
                 return new Vector4(x, y, z, w) == v;
@@ -384,13 +382,13 @@ namespace UnityCommon
 
         public static implicit operator IntVector4(int i) => zero + i;
 
-#if UNITY
+#if (UNITY || UNITY_STANDALONE || UNITY_EDITOR || UNITY_ANDROID || UNITY_64 || UNITY_WEBGL)
         public static implicit operator Vector4(IntVector4 iv) => new Vector4(iv.x, iv.y, iv.z, iv.w);
 #endif
 
         public static implicit operator System.Numerics.Vector4(IntVector4 iv) => new System.Numerics.Vector4(iv.x, iv.y, iv.z, iv.w);
 
-#if UNITY
+#if (UNITY || UNITY_STANDALONE || UNITY_EDITOR || UNITY_ANDROID || UNITY_64 || UNITY_WEBGL)
         public static explicit operator IntVector4(Vector4 v) => new IntVector4((int)v.x, (int)v.y, (int)v.z, (int)v.w);
 #endif
 
@@ -419,7 +417,7 @@ namespace UnityCommon
 
         public static IntVector4 operator -(int a, IntVector4 b) => new IntVector4(a - b.x, a - b.y, a - b.z, a - b.w);
 
-#if UNITY
+#if (UNITY || UNITY_STANDALONE || UNITY_EDITOR || UNITY_ANDROID || UNITY_64 || UNITY_WEBGL)
         // IntVector (op) Float
         public static Vector4 operator *(IntVector4 a, float b) => ((Vector4)a) * b;
 
@@ -446,7 +444,7 @@ namespace UnityCommon
 
         public static IntVector4 operator /(IntVector4 left, IntVector4 right) => new IntVector4(left.x / right.x, left.y / right.y, left.z / right.z, left.w / right.w);
 
-#if UNITY
+#if (UNITY || UNITY_STANDALONE || UNITY_EDITOR || UNITY_ANDROID || UNITY_64 || UNITY_WEBGL)
         // IntVector (op) Vector
 
         public static Vector4 operator +(IntVector4 a, Vector4 b) => (Vector4)a + b;
