@@ -1024,7 +1024,7 @@ namespace UnityCommon
 
         public static IEnumerable<Vector3Int> Range(Vector2Int start, Vector2Int end, Vector2Int? step = null)
         {
-            var a = step ?? IntVector2.one;
+            var a = step ?? Vector2Int.one;
             Vector3Int o = default;
 
             for (int y = start.y; y <= end.y; y += a.y)
