@@ -55,13 +55,13 @@
 
         public static explicit operator Vector4Int(Vector4 v) => new Vector4Int((int)v.x, (int)v.y, (int)v.z, (int)v.w);
 
-        public static explicit operator IntVector2(Vector4Int v) => new IntVector2(v.x, v.y);
+        public static explicit operator Vector2Int(Vector4Int v) => new Vector2Int(v.x, v.y);
 
-        public static explicit operator IntVector3(Vector4Int v) => new IntVector3(v.x, v.y, v.z);
+        public static explicit operator Vector3Int(Vector4Int v) => new Vector3Int(v.x, v.y, v.z);
 
-        public static explicit operator Vector4Int(IntVector2 v) => new Vector4Int(v.x, v.y, 0, 0);
+        public static explicit operator Vector4Int(Vector2Int v) => new Vector4Int(v.x, v.y, 0, 0);
 
-        public static explicit operator Vector4Int(IntVector3 v) => new Vector4Int(v.x, v.y, v.z, 0);
+        public static explicit operator Vector4Int(Vector3Int v) => new Vector4Int(v.x, v.y, v.z, 0);
 
         // IntVector (op) Int
         public static Vector4Int operator *(Vector4Int a, int b) => new Vector4Int(a.x * b, a.y * b, a.z * b, a.w * b);
