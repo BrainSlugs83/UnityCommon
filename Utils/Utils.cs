@@ -1022,10 +1022,10 @@ namespace UnityCommon
             }
         }
 
-        public static IEnumerable<IntVector3> Range(IntVector2 start, IntVector2 end, IntVector2? step = null)
+        public static IEnumerable<Vector3Int> Range(Vector2Int start, Vector2Int end, Vector2Int? step = null)
         {
             var a = step ?? IntVector2.one;
-            IntVector3 o = default;
+            Vector3Int o = default;
 
             for (int y = start.y; y <= end.y; y += a.y)
             {
@@ -1039,10 +1039,10 @@ namespace UnityCommon
             }
         }
 
-        public static IEnumerable<IntVector4> Range(IntVector3 start, IntVector3 end, IntVector3? step = null)
+        public static IEnumerable<Vector4Int> Range(Vector3Int start, Vector3Int end, Vector3Int? step = null)
         {
-            var a = step ?? IntVector3.one;
-            IntVector4 o = default;
+            var a = step ?? Vector3Int.one;
+            Vector4Int o = default;
 
             for (int z = start.z; z <= end.z; z += a.z)
             {
