@@ -500,6 +500,10 @@ namespace UnityCommon
                 {
                     return cc.Overlap(layerMask);
                 }
+                else if (col is CharacterController chc && chc)
+                {
+                    return chc.Overlap(layerMask);
+                }
             }
 
             Debug.LogError("Overlap used with unsupported collider type: " + (col ? col.GetType().Name : "[null]"));
@@ -648,6 +652,39 @@ namespace UnityCommon
             var direction = capsule.direction == 0 ? Vector3.right
                         : capsule.direction == 1 ? Vector3.up
                         : Vector3.forward;
+
+            var p0 = mat.MultiplyVector(direction * capsule.height / 2f);
+            var p1 = pos - p0;
+            p0 += pos;
+
+            var a2 = Vector3.right;
+            if (a2 == direction) { a2 = Vector3.up; }
+            var a3 = Vector3.Cross(direction, a2).Abs();
+
+            var radius = Mathf.Sqrt
+            (
+                Mathf.Max
+                (
+                    mat.MultiplyVector(a2 * capsule.radius).sqrMagnitude,
+                    mat.MultiplyVector(a3 * capsule.radius).sqrMagnitude
+                )
+            );
+
+            return
+            (
+                layerMask.HasValue
+                ? Physics.OverlapCapsule(p0, p1, radius, layerMask.Value)
+                : Physics.OverlapCapsule(p0, p1, radius)
+            )
+            .Where(c => c != capsule);
+        }
+
+        public static IEnumerable<Collider> Overlap(this CharacterController capsule, LayerMask? layerMask = null)
+        {
+            var mat = capsule.gameObject.transform.localToWorldMatrix;
+            var pos = mat.MultiplyPoint(capsule.center);
+
+            var direction = Vector3.up;
 
             var p0 = mat.MultiplyVector(direction * capsule.height / 2f);
             var p1 = pos - p0;
