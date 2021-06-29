@@ -17,7 +17,9 @@ public class InstallPackages : EditorWindow
     private List<string> Packages = new List<string>(new[]
     {
         "DOTween HOTween v2",
-        "Grabbit - Editor Physics Transforms",
+        "Rainbow Folders 2",
+        "Technie Collider Creator",
+        "Amplify Shader Editor",
         "VR Tunnelling Pro"
     });
 
