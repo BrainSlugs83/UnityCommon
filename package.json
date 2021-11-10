@@ -21,7 +21,6 @@
         "com.unity.recorder": "2.5.5",
         "com.unity.formats.fbx": "4.0.1",
         "com.unity.ide.vscode": "1.2.3",
-        "com.unity.ide.visualstudio": "2.0.9",
-        "com.unity.quicksearch": "2.0.2"
+        "com.unity.ide.visualstudio": "2.0.9"
     }
 }
