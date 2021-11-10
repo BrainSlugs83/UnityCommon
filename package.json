@@ -2,7 +2,7 @@
     "name": "com.brainslugs83.common",
     "displayName": "Mikey's Prereqs",
     "description": "Mikey's Collection of Common Packages and other random bullshit.",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "keywords": ["Mikey", "BrainSlugs83", "UnityCommon", "Common", "Preq", "Prerequisite", "Preqs", "Prerequisites"],
     "author": { 
         "name" : "BrainSlugs83",
@@ -17,10 +17,10 @@
         "com.unity.textmeshpro":  "3.0.6",
         "com.unity.editorcoroutines": "1.0.0",
         "com.unity.multiplayer-hlapi": "1.1.1",
-        "com.unity.terrain-tools": "3.0.2-preview.3",
-        "com.unity.recorder": "2.5.5",
-        "com.unity.formats.fbx": "4.0.1",
-        "com.unity.ide.vscode": "1.2.3",
-        "com.unity.ide.visualstudio": "2.0.9"
+        "com.unity.terrain-tools": "4.0.3",
+        "com.unity.recorder": "3.0.1",
+        "com.unity.formats.fbx": "4.1.1",
+        "com.unity.ide.vscode": "1.2.4",
+        "com.unity.ide.visualstudio": "2.0.12"
     }
 }
