@@ -2,7 +2,7 @@
     "name": "com.brainslugs83.common",
     "displayName": "Mikey's Prereqs",
     "description": "Mikey's Collection of Common Packages and other random bullshit.",
-    "version": "2.1.1",
+    "version": "3.0.0",
     "keywords": ["Mikey", "BrainSlugs83", "UnityCommon", "Common", "Preq", "Prerequisite", "Preqs", "Prerequisites"],
     "author": { 
         "name" : "BrainSlugs83",
