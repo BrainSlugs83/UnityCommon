@@ -14,6 +14,9 @@ namespace UnityCommon
 
         private void Start()
         {
+            // Potential Bug #14: This is a bug because DestroyImmediate performs synchronous destruction during play mode even though deferred destruction provides the intended one-frame cleanup safely.
+            // Suggested Fix: Use Destroy(this).
+            // Related: #11, #13, #20.
             DestroyImmediate(this);
         }
 

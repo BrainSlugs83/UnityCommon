@@ -105,9 +105,11 @@ namespace UnityCommon
                 if (!collider.gameObject.activeInHierarchy) { continue; }
                 if (collider.isTrigger) { continue; }
 
-                var tx = collider.transform.localToWorldMatrix;
-
                 var b = collider.bounds;
+                var tx = collider.transform.localToWorldMatrix;
+                // Potential Bug #16: This is a bug because Collider.bounds is already a world-space AABB, so applying localToWorldMatrix transforms its corners a second time and biases samples away from the object.
+                // Suggested Fix: Remove tx and use b.min and b.max directly as the world-space sampling bounds.
+                // Related: #17.
                 var apt = tx.MultiplyPoint((b.center - (b.size / 2f)));
                 var bpt = tx.MultiplyPoint((b.center + (b.size / 2f)));
 
@@ -120,6 +122,9 @@ namespace UnityCommon
                 maxZ = Mathf.Max(maxZ, apt.z, bpt.z);
             }
 
+            // Potential Bug #17: This is a bug because no active non-trigger collider leaves the min/max accumulators at opposite float extremes, so Random.Range can produce infinity or NaN coordinates.
+            // Suggested Fix: Track whether any valid collider contributed bounds and return a documented fallback or throw before sampling when none did.
+            // Related: #16.
             var pt = new Vector3
             (
                 UnityEngine.Random.Range(minX, maxX),
@@ -222,6 +227,9 @@ namespace UnityCommon
                     {
                         foreach (var cp in colliderParents)
                         {
+                            // Potential Bug #15: This is a bug because mutating CollidingAt directly leaves CollisionDetector's private collider set unchanged and creates the inconsistent state that can later discard active collisions.
+                            // Suggested Fix: Add a CollisionDetector method that removes an object from both internal collections atomically and call it here.
+                            // Related: #6, #7, #8, #9.
                             cd.CollidingAt.Remove(cp);
                         }
                     }
@@ -245,10 +253,16 @@ namespace UnityCommon
                 try
                 {
                     var bgRunner = new GameObject("BgRunner").AddComponent<BgRunner>();
+                    // Potential Bug #18: This is a bug because AddComponent invokes Awake synchronously and this explicit call invokes initialization a second time.
+                    // Suggested Fix: Remove the manual bgRunner.Awake() call and let Unity own the lifecycle callback.
+                    // Related: #5, #19.
                     bgRunner.Awake(); // force it to get assigned.
                 }
                 catch
                 {
+                    // Potential Bug #19: This is a bug because swallowing every exception hides failure to create the coroutine runner and leaves callers with no actionable error.
+                    // Suggested Fix: Catch only expected exceptions, log them through Debug.LogException, and let unexpected failures propagate.
+                    // Related: #5, #18.
                     /* maybe this will work? */
                 }
             }
@@ -823,6 +837,9 @@ namespace UnityCommon
 
         public static void ClearMarkers()
         {
+            // Potential Bug #20: This is a bug because SetMarker can call ClearMarkers from a physics or rendering callback where Unity prohibits immediate GameObject destruction and throws.
+            // Suggested Fix: Use Destroy while playing and DestroyImmediate only in edit mode.
+            // Related: #11, #13, #14, #21, #22.
             foreach (var obj in Markers) { if (obj) { GameObject.DestroyImmediate(obj); } }
             Markers.Clear();
             lastClear = Time.unscaledTime;
@@ -838,6 +855,9 @@ namespace UnityCommon
                 {
                     if (mr)
                     {
+                        // Potential Bug #21: This is a bug because renderer.materials instantiates private Material copies and the per-frame marker cleanup never destroys those material instances.
+                        // Suggested Fix: Set marker color with a MaterialPropertyBlock or a deliberately managed shared material.
+                        // Related: #20, #22.
                         foreach (var m in mr.materials)
                         {
                             if (m)
@@ -871,6 +891,9 @@ namespace UnityCommon
 
                 if (debugMesh == null)
                 {
+                    // Potential Bug #22: This is a bug because the static runtime Mesh is never destroyed, so it can survive marker churn and leak native mesh memory across lifecycle or domain-reload configurations.
+                    // Suggested Fix: Own the mesh in a cleanup component and call Destroy or DestroyImmediate as appropriate when that owner shuts down.
+                    // Related: #20, #21.
                     debugMesh = new Mesh();
                     debugMesh.vertices = new[]
                     {
@@ -1002,6 +1025,9 @@ namespace UnityCommon
             if (dir.HasFlag(Directions.Up)) { result += Vector3.up; count++; }
             if (dir.HasFlag(Directions.Down)) { result -= Vector3.up; count++; }
 
+            // Potential Bug #23: This is a bug because dividing by the number of flags computes an average rather than a unit vector, making diagonal and partially cancelled directions slower.
+            // Suggested Fix: Return normalized ? result.normalized : result.
+            // Related: #24.
             if (normalized && count > 1.0f) { result /= count; }
             return result;
         }
@@ -1017,6 +1043,9 @@ namespace UnityCommon
             if (dir.HasFlag(Directions.Up)) { result += t.up; count++; }
             if (dir.HasFlag(Directions.Down)) { result -= t.up; count++; }
 
+            // Potential Bug #24: This is a bug because dividing by the number of flags computes an average rather than a unit vector, making diagonal and partially cancelled transform-relative directions slower.
+            // Suggested Fix: Return normalized ? result.normalized : result.
+            // Related: #23.
             if (normalized && count > 1.0f) { result /= count; }
             return result;
         }

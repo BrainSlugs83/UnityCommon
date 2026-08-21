@@ -31,6 +31,9 @@ namespace UnityCommon
             if (AmDebugging && Debugger.IsAttached) { Debugger.Break(); }
 #endif
 
+            // Potential Bug #6: This is a bug because clearing only CollidingAt leaves stale GameObject and Collider entries in the parallel colliders dictionary across lifecycle transitions.
+            // Suggested Fix: Clear colliders whenever CollidingAt is cleared, preferably through one method that resets both collections atomically.
+            // Related: #7, #8, #15.
             CollidingAt.Clear();
         }
 
@@ -60,6 +63,9 @@ namespace UnityCommon
 
         public void AddCollider(GameObject go, Collider co)
         {
+            // Potential Bug #7: This is a bug because a missing CollidingAt entry causes an existing collider HashSet to be replaced, silently forgetting colliders that are still overlapping.
+            // Suggested Fix: Create the HashSet only when !colliders.ContainsKey(go); maintain CollidingAt independently.
+            // Related: #6, #8, #15.
             if (!CollidingAt.ContainsKey(go) || !colliders.ContainsKey(go))
             {
                 colliders[go] = new HashSet<Collider>();
@@ -97,6 +103,9 @@ namespace UnityCommon
 #endif
 
             var go = collision.gameObject;
+            // Potential Bug #8: This is a bug because the first child collider to exit removes the whole GameObject from CollidingAt even when other colliders on that object remain inside.
+            // Suggested Fix: Remove the exiting collider first, then remove CollidingAt[go] only when the associated collider set becomes empty.
+            // Related: #6, #7, #15.
             CollidingAt.Remove(go);
             RemoveCollider(collision.gameObject, collision.collider);
         }
@@ -138,6 +147,9 @@ namespace UnityCommon
             if (AmDebugging && Debugger.IsAttached) { Debugger.Break(); }
 #endif
             var go = other.gameObject;
+            // Potential Bug #9: This is a bug because the first child trigger to exit removes the whole GameObject from CollidingAt even when sibling triggers on that object still overlap.
+            // Suggested Fix: Remove the exiting trigger first, then remove CollidingAt[go] only when the associated collider set becomes empty.
+            // Related: #6, #7, #15.
             CollidingAt.Remove(go);
             RemoveCollider(other.gameObject, other);
         }

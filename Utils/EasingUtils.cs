@@ -492,6 +492,9 @@ namespace UnityCommon
            float bias
         )
         {
+            // Potential Bug #10: This is a bug because Hermite interpolation returns values in the y-domain, but the endpoint guards return normalized constants and cause discontinuities whenever y1 is not 0 or y2 is not 1.
+            // Suggested Fix: Return y1 when p <= 0 and y2 when p >= 1.
+            // Related: None.
             if (p <= 0.0f) { return 0.0f; }
             else if (p >= 1.0f) { return 1.0f; }
 

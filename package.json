@@ -3,6 +3,7 @@
     "displayName": "Mikey's Prereqs",
     "description": "Mikey's Collection of Common Packages and other random bullshit.",
     "version": "3.0.3",
+    "unity": "6000.4",
     "keywords": ["Mikey", "BrainSlugs83", "UnityCommon", "Common", "Preq", "Prerequisite", "Preqs", "Prerequisites"],
     "author": { 
         "name" : "BrainSlugs83",
@@ -11,6 +12,7 @@
     },
     "hideInEditor": false,
     "dependencies": {
+        "com.unity.render-pipelines.universal": "17.4.0",
         "com.unity.probuilder": "6.0.7",
         "com.unity.editorcoroutines": "1.0.1",
         "com.unity.recorder": "5.1.3",

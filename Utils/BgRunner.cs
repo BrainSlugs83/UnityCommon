@@ -13,6 +13,9 @@ namespace UnityCommon
         {
             if (Instance && Instance != this)
             {
+                // Potential Bug #5: This is a bug because destroying the entire duplicate GameObject also destroys unrelated sibling components and does so immediately while Awake callbacks may still be running.
+                // Suggested Fix: Use Destroy(this) to remove only the duplicate BgRunner component at the end of the frame.
+                // Related: #16, #17.
                 DestroyImmediate(this.gameObject);
             }
             else

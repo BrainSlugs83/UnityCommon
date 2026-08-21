@@ -20,12 +20,13 @@ Shader "Skybox Gradient"
 	{
 		
 		
-		Tags { "RenderType"="Opaque" }
+		Tags
+		{
+			"RenderType"="Opaque"
+			"RenderPipeline"="UniversalPipeline"
+		}
 	LOD 100
 
-		CGINCLUDE
-		#pragma target 3.0
-		ENDCG
 		Blend Off
 		Cull Back
 		ColorMask RGBA
@@ -38,21 +39,18 @@ Shader "Skybox Gradient"
 		Pass
 		{
 			Name "Unlit"
-			Tags { "LightMode"="ForwardBase" }
-			CGPROGRAM
+			Tags { "LightMode"="SRPDefaultUnlit" }
+			HLSLPROGRAM
 
 			
 
-			#ifndef UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX
-			//only defining to not throw compilation error over Unity 5.5
-			#define UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input)
-			#endif
+			#pragma target 3.0
 			#pragma vertex vert
 			#pragma fragment frag
 			#pragma multi_compile_instancing
-			#include "UnityCG.cginc"
 			#pragma shader_feature_local _SCREENSPACE_ON
 
+			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
 			struct appdata
 			{
@@ -74,10 +72,12 @@ Shader "Skybox Gradient"
 				float4 ase_texcoord2 : TEXCOORD2;
 			};
 
-			uniform float4 _Bottom;
-			uniform float4 _Top;
-			uniform float _mult;
-			uniform float _pwer;
+			CBUFFER_START(UnityPerMaterial)
+				float4 _Bottom;
+				float4 _Top;
+				float _mult;
+				float _pwer;
+			CBUFFER_END
 
 			
 			v2f vert ( appdata v )
@@ -87,7 +87,7 @@ Shader "Skybox Gradient"
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 
-				float4 ase_clipPos = UnityObjectToClipPos(v.vertex);
+				float4 ase_clipPos = TransformObjectToHClip(v.vertex.xyz);
 				float4 screenPos = ComputeScreenPos(ase_clipPos);
 				o.ase_texcoord2 = screenPos;
 				
@@ -102,19 +102,19 @@ Shader "Skybox Gradient"
 				#else
 				v.vertex.xyz += vertexValue;
 				#endif
-				o.vertex = UnityObjectToClipPos(v.vertex);
+				o.vertex = TransformObjectToHClip(v.vertex.xyz);
 
 #ifdef ASE_NEEDS_FRAG_WORLD_POSITION
-				o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+				o.worldPos = TransformObjectToWorld(v.vertex.xyz);
 #endif
 				return o;
 			}
 			
-			fixed4 frag (v2f i ) : SV_Target
+			half4 frag (v2f i ) : SV_Target
 			{
 				UNITY_SETUP_INSTANCE_ID(i);
 				UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
-				fixed4 finalColor;
+				half4 finalColor;
 #ifdef ASE_NEEDS_FRAG_WORLD_POSITION
 				float3 WorldPosition = i.worldPos;
 #endif
@@ -132,7 +132,7 @@ Shader "Skybox Gradient"
 				finalColor = lerpResult3;
 				return finalColor;
 			}
-			ENDCG
+			ENDHLSL
 		}
 	}
 	CustomEditor "ASEMaterialInspector"
